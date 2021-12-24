@@ -1,10 +1,16 @@
 from flask import Flask
+from flask_migrate import Migrate
+
 from src.config import get_config
+from src.models import db
+#
 
-
-def init_app():
+def create_app():
     app = Flask(__name__)
     app.config.from_object(get_config())
+
+    db.init_app(app)
+    migrate = Migrate(app, db)
 
     @app.route('/')
     def index():

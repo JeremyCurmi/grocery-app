@@ -32,6 +32,7 @@ class DevConfig(Config):
 
 
 def get_config() -> str:
+    path = "src" + "."
     if ENV == "debug":
-        return "config.DevConfig"
-    return "config.ProdConfig"
+        return path + "config.DevConfig"
+    return path + "config.ProdConfig"
