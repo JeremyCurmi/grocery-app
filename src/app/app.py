@@ -1,18 +1,21 @@
 from flask import Flask
-from flask_migrate import Migrate
 
-from src.models import db
-from src.routes import home
+from src.models import db, migrate
+from src.routes import home, user
+from src.config import get_config
 
 
-def create_app(env: str):
+def create_app(env: str = get_config()):
     app = Flask(__name__,
                 template_folder='../frontend/templates',
                 static_folder='../frontend/static')
     app.config.from_object(env)
 
     db.init_app(app)
-    Migrate(app, db)
+    migrate.init_app(app, db)
+
+    app.config["db"] = db
 
     app.register_blueprint(home)
+    app.register_blueprint(user)
     return app

@@ -1,12 +1,14 @@
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
 db = SQLAlchemy()
+migrate = Migrate()
 
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
-    email = db.Column(db.String(80))
+    email = db.Column(db.String(80), unique=True)
     password = db.Column(db.String(50))
     date_created = db.Column(db.TIMESTAMP)
 

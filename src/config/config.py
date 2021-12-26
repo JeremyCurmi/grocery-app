@@ -11,10 +11,11 @@ class Config:
     SECRET_KEY = env_vars.get("SECRET_KEY")
     MYSQL_USER = env_vars.get("MYSQL_USER")
     MYSQL_HOST = env_vars.get("MYSQL_HOST")
+    MYSQL_PORT = env_vars.get("MYSQL_PORT")
     MYSQL_PASSWORD = env_vars.get("MYSQL_PASSWORD")
     MYSQL_DATABASE = env_vars.get("MYSQL_DATABASE")
     SQLALCHEMY_TRACK_MODIFICATIONS = True
-    SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOST}/{MYSQL_DATABASE}"
+    SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DATABASE}"
 
 
 class ProdConfig(Config):
