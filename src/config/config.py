@@ -29,8 +29,8 @@ class DevConfig(Config):
     TESTING = True
 
 
-def get_config() -> str:
+def get_config(is_test: bool = False) -> str:
     path = "src" + "."
-    if ENV == "debug":
+    if any([ENV == "debug", is_test]):
         return path + "config.DevConfig"
     return path + "config.ProdConfig"
