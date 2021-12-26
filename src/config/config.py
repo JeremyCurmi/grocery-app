@@ -9,8 +9,6 @@ class Config:
     FLASK_RUN_HOST = env_vars.get("API_HOST")
     FLASK_RUN_PORT = env_vars.get("API_PORT")
     SECRET_KEY = env_vars.get("SECRET_KEY")
-    STATIC_FOLDER = env_vars.get("STATIC_FOLDER")
-    TEMPLATES_FOLDER = env_vars.get("TEMPLATES_FOLDER")
     MYSQL_USER = env_vars.get("MYSQL_USER")
     MYSQL_HOST = env_vars.get("MYSQL_HOST")
     MYSQL_PASSWORD = env_vars.get("MYSQL_PASSWORD")
