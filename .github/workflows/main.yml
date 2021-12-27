@@ -46,9 +46,6 @@ jobs:
       - name: Set up database
         run: docker-compose up -d
 
-      - name: wait for compose file
-        run: python sleep.py
-
       - name: Run tests
         run: python -m unittest
 
