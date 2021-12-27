@@ -15,20 +15,19 @@ class Config:
     FLASK_RUN_PORT = env_vars.get("API_PORT")
     SECRET_KEY = env_vars.get("SECRET_KEY")
     SQLALCHEMY_TRACK_MODIFICATIONS = True
+    SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOST}:3307/{MYSQL_DATABASE}"
 
 
 class ProdConfig(Config):
     FLASK_ENV = "production"
     DEBUG = False
     TESTING = False
-    SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOST}:{MYSQL_PORT}/{MYSQL_DATABASE}"
 
 
 class DevConfig(Config):
     FLASK_ENV = "development"
     DEBUG = True
     TESTING = False
-    SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_HOST}:3307/{MYSQL_DATABASE}"
 
 
 class TestConfig(Config):
