@@ -14,14 +14,14 @@ class TestProductCrud(FlaskSQLAlchemy):
         self.assertIsInstance(payload, dict)
         self.assertEqual(payload.get('name'), "cheese")
 
-    def test_get_product_by_name_returns_list_with_one_element_json(self):
-        self.fail()
-
-    def test_get_all_products(self):
-        self.fail()
-
-    def test_create_product(self):
-        self.fail()
+    # def test_get_product_by_name_returns_list_with_one_element_json(self):
+    #     self.fail()
+    #
+    # def test_get_all_products(self):
+    #     self.fail()
+    #
+    # def test_create_product(self):
+    #     self.fail()
 
 
 if __name__ == '__main__':
