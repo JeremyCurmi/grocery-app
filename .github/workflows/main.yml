@@ -49,9 +49,6 @@ jobs:
       - name: wait for compose file
         run: python sleep.py
 
-      - name: Set up database again ... not sure why to run it twice
-        run: docker-compose up -d
-
       - name: Run tests
         run: python -m unittest
 
