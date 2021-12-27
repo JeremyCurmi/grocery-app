@@ -1,3 +1,4 @@
+import unittest
 from src.models import db
 from src.utils import FlaskSQLAlchemy, populate_db
 
@@ -28,7 +29,7 @@ class TestUserCrud(FlaskSQLAlchemy):
         response = self.app.get("/user/")
         data = response.get_json()
         self.assertTrue(response.status == "200 OK")
-        self.assertEqual(len(data), 2)
+        self.assertEqual(len(data), 3)
         self.assertEqual(data[0]["email"], "user1@email.com")
         self.assertEqual(data[1]["email"], "user2@email.com")
 
@@ -40,3 +41,7 @@ class TestUserCrud(FlaskSQLAlchemy):
         self.assertTrue(msg == "user created ✅")
         new_user = self.app.get("/user/email=test@email.com").get_json()
         self.assertEqual(new_user.get("email"), "test@email.com")
+
+
+if __name__ == '__main__':
+    unittest.main()
