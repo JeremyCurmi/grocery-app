@@ -46,6 +46,9 @@ jobs:
       - name: Set up database
         run: docker-compose up -d
 
+      - name: Wait for db to spin up
+        run: sleep 20
+
       - name: Run tests
         run: python -m unittest
 
