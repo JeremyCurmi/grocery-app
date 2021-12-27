@@ -1,8 +1,14 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from typing import Any, List
+
 
 db = SQLAlchemy()
 migrate = Migrate()
+
+
+def objs_to_json(objs: Any) -> List[Any]:
+    return [x.obj_to_json() for x in objs]
 
 
 class User(db.Model):
@@ -11,6 +17,14 @@ class User(db.Model):
     email = db.Column(db.String(80), unique=True)
     password = db.Column(db.String(50))
     date_created = db.Column(db.TIMESTAMP)
+
+    def obj_to_json(self):
+        return {"id": self.id,
+                "name": self.name,
+                "email": self.email,
+                "password": self.password,
+                "date_created": self.date_created,
+                }
 
 
 class Product(db.Model):

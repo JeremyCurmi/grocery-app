@@ -1,22 +1,42 @@
-import unittest
-from src.app import create_app
-from src.config import get_config
+from src.models import db
+from src.utils import FlaskSQLAlchemy, populate_db
 
 
-class TestUserCrud(unittest.TestCase):
-    def setUp(self) -> None:
-        self.app = create_app(get_config(is_test=True)).test_client()
+class TestUserCrud(FlaskSQLAlchemy):
+    def test_get_user_by_id_returns_json(self):
+        populate_db(db.session)
+        self.app = self.create_app().test_client()
+        response = self.app.get("/user/id=1")
+        message = response.get_json()
 
-    def test_get_user(self):
-        self.fail()
+        self.assertTrue(response.status == "200 OK")
+        self.assertIsInstance(message, dict)
+        self.assertEqual(message.get('email'), "user1@email.com")
+
+    def test_get_user_by_email_returns_json(self):
+        populate_db(db.session)
+        self.app = self.create_app().test_client()
+        response = self.app.get("/user/email=user2@email.com")
+        message = response.get_json()
+        self.assertTrue(response.status == "200 OK")
+        self.assertIsInstance(message, dict)
+        self.assertEqual(message.get('email'), "user2@email.com")
+
+    def test_get_all_users(self):
+        populate_db(db.session)
+        self.app = self.create_app().test_client()
+        response = self.app.get("/user/")
+        data = response.get_json()
+        self.assertTrue(response.status == "200 OK")
+        self.assertEqual(len(data), 2)
+        self.assertEqual(data[0]["email"], "user1@email.com")
+        self.assertEqual(data[1]["email"], "user2@email.com")
 
     def test_create_user(self):
+        self.app = self.create_app().test_client()
         response = self.app.post("/user", json={"name":"name","email":"test@email.com","password":"password"})
-        message = response.get_json().get("message")
+        msg = response.get_json().get("message")
         self.assertTrue(response.status == "200 OK")
-        self.assertTrue(message == "user created")
-        # assert that row has been included
-
-
-if __name__ == '__main__':
-    unittest.main()
+        self.assertTrue(msg == "user created ✅")
+        new_user = self.app.get("/user/email=test@email.com").get_json()
+        self.assertEqual(new_user.get("email"), "test@email.com")
