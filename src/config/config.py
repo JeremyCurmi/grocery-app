@@ -1,7 +1,7 @@
 from dotenv import dotenv_values
 
 env_vars = dotenv_values()
-ENV = env_vars.get("ENVIRONMENT")
+ENV = env_vars.get("ENVIRONMENT") or "debug"
 MYSQL_USER = env_vars.get("MYSQL_USER")
 MYSQL_HOST = env_vars.get("MYSQL_HOST")
 MYSQL_PORT = env_vars.get("MYSQL_PORT")
