@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  database:
+    image: mysql:5.7
+    volumes:
+      - ./mysql-dump:/docker-entrypoint-initdb.d
+      - mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    ports:
+      - "3306:3306"
+
+  database_dev:
+    image: mysql:5.7
+    volumes:
+      - ./mysql-dump:/docker-entrypoint-initdb.d
+      - mysql_dev_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    ports:
+      - "3307:3306"
+
+  database_test:
+    image: mysql:5.7
+    volumes:
+      - ./mysql-dump:/docker-entrypoint-initdb.d
+      - mysql_test_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    ports:
+      - "3308:3306"
+
+volumes:
+  mysql_data:
+  mysql_dev_data:
+  mysql_test_data:
