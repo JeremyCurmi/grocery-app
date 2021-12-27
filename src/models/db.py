@@ -1,6 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from typing import Any, List
+from datetime import datetime
 
 
 db = SQLAlchemy()
@@ -18,6 +19,9 @@ class User(db.Model):
     password = db.Column(db.String(50))
     date_created = db.Column(db.TIMESTAMP)
 
+    def enrich(self):
+        self.date_created = datetime.now()
+
     def obj_to_json(self):
         return {"id": self.id,
                 "name": self.name,
@@ -33,6 +37,17 @@ class Product(db.Model):
     unit = db.Column(db.String(50))
     price = db.Column(db.FLOAT)
     date_created = db.Column(db.TIMESTAMP)
+
+    def enrich(self):
+        self.date_created = datetime.now()
+
+    def obj_to_json(self):
+        return {"id": self.id,
+                "name": self.name,
+                "unit": self.unit,
+                "price": self.price,
+                "date_created": self.date_created,
+                }
 
 
 class Order(db.Model):

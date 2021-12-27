@@ -1,7 +1,7 @@
 from flask import Flask
 
 from src.models import db, migrate
-from src.routes import home, user
+from src.routes import home, user, product
 from src.config import get_config
 
 
@@ -18,4 +18,5 @@ def create_app(env: str = get_config()):
 
     app.register_blueprint(home)
     app.register_blueprint(user)
+    app.register_blueprint(product)
     return app

@@ -1,9 +1,8 @@
-from typing import Any
 from flask_testing import TestCase
 from src.app import create_app
-from src.models import db
+from src.models import db, User, Product
 from flask_sqlalchemy import SQLAlchemy
-from src.services import create_user_in_database
+from src.services import create_new
 
 
 class FlaskSQLAlchemy(TestCase):
@@ -20,7 +19,14 @@ class FlaskSQLAlchemy(TestCase):
 
 def populate_db(session: SQLAlchemy):
     users = [{"name": "user1", "email": "user1@email.com", "password": "password1"},
-             {"name": "user2", "email": "user2@email.com", "password": "password2"}]
+             {"name": "user2", "email": "user2@email.com", "password": "password2"},
+             {"name": "user2", "email": "user3@email.com", "password": "password3"}]
 
+    products = [{"name": "cheese","unit": "each","price": 2},
+                {"name": "ham","unit": "kg","price": 1},
+                {"name": "ham","unit": "kg","price": 1}]
     for user in users:
-        _ = create_user_in_database(session, **user)
+        _ = create_new(User, user)
+
+    for product in products:
+        _ = create_new(Product, product)
