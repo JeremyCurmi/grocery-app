@@ -1,5 +1,5 @@
-from flask import current_app, Blueprint, request, session
-from src.models import Product
+from flask import Blueprint, request, jsonify
+from src.models import objs_to_json, Product
 from src.services import (return_200_response,
                           create_new,
                         get_by_id,
@@ -14,6 +14,18 @@ product = Blueprint("product", __name__, url_prefix="/product")
 def get_product_by_id(id: int):
     product_ = get_by_id(Product, id)
     return product_.obj_to_json()
+
+
+@product.route("/name=<name>")
+def get_product_by_name(name: str):
+    products = get_by_name(Product, name)
+    return jsonify(objs_to_json(products))
+
+
+@product.route("/")
+def get_all_products():
+    products = get_all(Product)
+    return jsonify(objs_to_json(products))
 
 
 @product.route("", methods=['POST'])

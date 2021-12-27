@@ -15,13 +15,32 @@ class TestProductCrud(FlaskSQLAlchemy):
         self.assertEqual(payload.get('name'), "cheese")
 
     def test_get_product_by_name_returns_list_with_one_element_json(self):
-        self.fail()
-    #
-    # def test_get_all_products(self):
-    #     self.fail()
-    #
-    # def test_create_product(self):
-    #     self.fail()
+        populate_db(db.session)
+        self.app = self.create_app().test_client()
+        response = self.app.get("/product/name=cheese")
+        payload = response.get_json()
+        self.assertTrue(response.status == "200 OK")
+        self.assertIsInstance(payload, list)
+        self.assertEqual(payload[0].get('name'), "cheese")
+
+    def test_get_all_products(self):
+        populate_db(db.session)
+        self.app = self.create_app().test_client()
+        response = self.app.get("/product/")
+        payload = response.get_json()
+        self.assertEqual(len(payload), 3)
+        self.assertEqual(payload[0].get("name"), 'cheese')
+        self.assertEqual(payload[1].get("name"), 'ham')
+
+    def test_create_product(self):
+        self.app = self.create_app().test_client()
+        response = self.app.post("/product", json={"name": "cheese", "unit": "each","price": 2})
+        msg = response.get_json().get("message")
+
+        self.assertTrue(response.status == "200 OK")
+        self.assertTrue(msg == "product created ✅")
+        new_product = self.app.get("/product/name=cheese").get_json()
+        self.assertEqual(new_product[0].get("name"), "cheese")
 
 
 if __name__ == '__main__':

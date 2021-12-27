@@ -37,6 +37,7 @@ class TestUserCrud(FlaskSQLAlchemy):
         self.app = self.create_app().test_client()
         response = self.app.post("/user", json={"name":"name","email":"test@email.com","password":"password"})
         msg = response.get_json().get("message")
+
         self.assertTrue(response.status == "200 OK")
         self.assertTrue(msg == "user created ✅")
         new_user = self.app.get("/user/email=test@email.com").get_json()
