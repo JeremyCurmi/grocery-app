@@ -28,3 +28,12 @@ def return_200_response(message: str) -> Response:
         ),
         HTTPStatus.OK,
     )
+
+
+def return_400_response(message: str) -> Response:
+    return make_response(
+        jsonify(
+            {"message": message}
+        ),
+        HTTPStatus.BAD_REQUEST
+    )

@@ -1,7 +1,6 @@
 from flask_testing import TestCase
 from src.app import create_app
 from src.models import db, User, Product
-from flask_sqlalchemy import SQLAlchemy
 from src.services import create_new
 
 
@@ -17,7 +16,7 @@ class FlaskSQLAlchemy(TestCase):
         db.drop_all()
 
 
-def populate_db(session: SQLAlchemy):
+def populate_db():
     users = [{"name": "user1", "email": "user1@email.com", "password": "password1"},
              {"name": "user2", "email": "user2@email.com", "password": "password2"},
              {"name": "user2", "email": "user3@email.com", "password": "password3"}]

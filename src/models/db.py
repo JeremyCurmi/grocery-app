@@ -14,9 +14,9 @@ def objs_to_json(objs: Any) -> List[Any]:
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50))
-    email = db.Column(db.String(80), unique=True)
-    password = db.Column(db.String(50))
+    name = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(80), unique=True, nullable=False)
+    password = db.Column(db.String(50), nullable=False)
     date_created = db.Column(db.TIMESTAMP)
 
     def enrich(self):
@@ -33,9 +33,9 @@ class User(db.Model):
 
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(150))
-    unit = db.Column(db.String(50))
-    price = db.Column(db.FLOAT)
+    name = db.Column(db.String(150), nullable=False)
+    unit = db.Column(db.String(50), nullable=False)
+    price = db.Column(db.FLOAT, nullable=False)
     date_created = db.Column(db.TIMESTAMP)
 
     def enrich(self):

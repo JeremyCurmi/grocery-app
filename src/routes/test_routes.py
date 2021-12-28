@@ -10,4 +10,4 @@ class TestHomePage(TestCase):
 
     def test_index_exists_and_returns_200(self):
         response = self.app.get("/")
-        self.assertTrue(response.status == "200 OK")
+        self.assertTrue(response.status_code == 200)
