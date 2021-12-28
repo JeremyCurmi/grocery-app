@@ -1,5 +1,5 @@
 import unittest
-from src.models import db
+from src.models import db, User
 from src.utils import FlaskSQLAlchemy, populate_db
 
 
@@ -42,6 +42,13 @@ class TestUserCrud(FlaskSQLAlchemy):
         self.assertTrue(msg == "user created ✅")
         new_user = self.app.get("/user/email=test@email.com").get_json()
         self.assertEqual(new_user.get("email"), "test@email.com")
+
+    def test_get_user_by_email_when_email_does_not_exists_should_respond_with_200_and_nice_error_message(self):
+        self.app = self.create_app().test_client()
+        response = self.app.get("/user/email=email_does_not_exist")
+        payload = response.get_json()
+        self.assertTrue(response.status == "200 OK")
+        self.assertTrue(payload.get("message") == f"No {User.__name__} was found")
 
 
 if __name__ == '__main__':

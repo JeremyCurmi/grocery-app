@@ -1,5 +1,5 @@
 import unittest
-from src.models import db
+from src.models import db, Product
 from src.utils import FlaskSQLAlchemy, populate_db
 
 
@@ -41,6 +41,20 @@ class TestProductCrud(FlaskSQLAlchemy):
         self.assertTrue(msg == "product created ✅")
         new_product = self.app.get("/product/name=cheese").get_json()
         self.assertEqual(new_product[0].get("name"), "cheese")
+
+    def test_get_product_by_id_when_id_does_not_exists_should_respond_with_200_and_nice_error_message(self):
+        self.app = self.create_app().test_client()
+        response = self.app.get("/product/id=1")
+        payload = response.get_json()
+        self.assertTrue(response.status == "200 OK")
+        self.assertTrue(payload.get("message") == f"No {Product.__name__} was found")
+
+    def test_get_all_products_when_none_exist_should_respond_with_200_and_nice_response(self):
+        self.app = self.create_app().test_client()
+        response = self.app.get("/product/")
+        payload = response.get_json()
+        self.assertTrue(response.status == "200 OK")
+        self.assertTrue(payload.get("message") == f"No {Product.__name__} was found")
 
 
 if __name__ == '__main__':

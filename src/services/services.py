@@ -1,5 +1,3 @@
-from http import HTTPStatus
-from flask import make_response, jsonify, Response
 from typing import Any, List
 from src.models import db
 
@@ -24,10 +22,7 @@ def get_by_name(Model: db.Model, name: str) -> List[db.Model]:
     return db.session.query(Model).filter_by(name=name).all()
 
 
-def return_200_response(message: str) -> Response:
-    return make_response(
-        jsonify(
-            {"message": message}
-        ),
-        HTTPStatus.OK,
-    )
+def verify_get_response(model: Any) -> bool:
+    if any([model is None, model == []]):
+        return False
+    return True
