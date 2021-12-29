@@ -1,13 +1,18 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, render_template
 from src.models import Product
 from . import handle_get_response, handle_get_multiple_values_response, handle_create_response, handle_delete_response
 from src.services import (get_by_id,
                         get_by_name,
                         get_all,
-delete_by_id,
                           )
 
 product = Blueprint("product", __name__, url_prefix="/product")
+
+
+@product.route("")
+def index():
+    return render_template("product.html",
+                           page_title="Products")
 
 
 @product.route("/id=<int:id_>")

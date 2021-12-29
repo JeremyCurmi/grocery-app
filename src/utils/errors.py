@@ -1,3 +1,5 @@
+# link: https://www.programiz.com/python-programming/user-defined-exception
+
 class Error(Exception):
     """Base class for all exceptions"""
     pass

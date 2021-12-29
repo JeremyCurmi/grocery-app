@@ -1,5 +1,7 @@
 import unittest
-from src.models import db, Product
+from src.models import Product
+from src.app import create_app
+from src.config import get_config
 from src.mocks import FlaskSQLAlchemy, populate_db
 
 
@@ -84,6 +86,15 @@ class TestProductCrud(FlaskSQLAlchemy):
         msg = response.get_json().get("message")
         self.assertTrue(response.status_code == 400)
         self.assertTrue(msg == "No rows to delete")
+
+
+class TestProductUi(unittest.TestCase):
+    def setUp(self) -> None:
+        self.app = create_app(get_config(is_test=True)).test_client()
+
+    def test_product_webpage_and_returns_200(self):
+        response = self.app.get("/product")
+        self.assertTrue(response.status_code == 200)
 
 
 if __name__ == '__main__':
