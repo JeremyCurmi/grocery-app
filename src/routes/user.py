@@ -1,25 +1,22 @@
 from flask import Blueprint, request
-from sqlalchemy.exc import IntegrityError
 from src.models import User
-from . import return_200_response, handle_get_response, handle_get_multiple_values_response, return_400_response
-from src.services import (create_new,
-                          get_by_id,
+from . import handle_create_response, handle_get_response, handle_get_multiple_values_response, handle_delete_response
+from src.services import (get_by_id,
                           get_user_by_email,
                           get_all,
                           )
-from src.utils import parse_sqlalchemy_integrity_error_message
 
 
 user = Blueprint("user", __name__, url_prefix="/user")
 
 
-@user.route("/id=<id>")
-def get_user_by_id(id: int):
-    user_ = get_by_id(User, id)
+@user.route("/id=<int:id_>")
+def get_user_by_id(id_: int):
+    user_ = get_by_id(User, id_)
     return handle_get_response(User, user_)
 
 
-@user.route("/email=<email>")
+@user.route("/email=<string:email>")
 def get_user_by_email_(email: str):
     user_ = get_user_by_email(email)
     return handle_get_response(User, user_)
@@ -31,14 +28,12 @@ def get_all_users():
     return handle_get_multiple_values_response(User, users)
 
 
-@user.route("", methods=['POST'])
+@user.route("/", methods=['POST'])
 def create_user():
     user_data = request.get_json()
-    try:
-        result = create_new(User, user_data)
-        return return_200_response(result)
-    except TypeError as err:
-        return return_400_response(str(err))
-    except IntegrityError as err:
-        msg = parse_sqlalchemy_integrity_error_message(err)
-        return return_400_response(msg)
+    return handle_create_response(User, user_data)
+
+
+@user.route("/id=<int:id_>", methods=["DELETE"])
+def delete_user(id_: int):
+    return handle_delete_response(User, id_)

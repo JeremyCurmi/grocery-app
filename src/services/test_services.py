@@ -1,7 +1,8 @@
-from src.models import db, User, Product
+from src.models import User, Product
 from . import create_new, get_by_id, get_all, get_user_by_email, get_by_name, delete_by_id
 from sqlalchemy.exc import IntegrityError
 from src.mocks import FlaskSQLAlchemy, populate_db
+from src.utils import DatabaseError
 
 
 class TestUserServices(FlaskSQLAlchemy):
@@ -109,6 +110,5 @@ class TestProductServices(FlaskSQLAlchemy):
     def test_delete_product_by_id_when_id_does_not_exist(self):
         product = get_by_id(Product, 10)
         self.assertIsNone(product)
-        msg = delete_by_id(Product, 10)
-        self.assertIsInstance(msg, Exception)
-        self.assertEqual(str(msg), "No rows to delete")
+        with self.assertRaises(DatabaseError):
+            msg = delete_by_id(Product, 10)

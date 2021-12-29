@@ -34,7 +34,7 @@ class TestProductCrud(FlaskSQLAlchemy):
 
     def test_create_product(self):
         self.app = self.create_app().test_client()
-        response = self.app.post("/product", json={"name": "cheese", "unit": "each","price": 2})
+        response = self.app.post("/product/", json={"name": "cheese", "unit": "each","price": 2})
         msg = response.get_json().get("message")
 
         self.assertTrue(response.status_code == 200)
@@ -44,18 +44,17 @@ class TestProductCrud(FlaskSQLAlchemy):
 
     def test_create_product_incorrectly_invalid_column_name(self):
         self.app = self.create_app().test_client()
-        response = self.app.post("/product", json={"name": "cheese", "unit": "each", "price1": 2})
+        response = self.app.post("/product/", json={"name": "cheese", "unit": "each", "price1": 2})
         msg = response.get_json().get("message")
         self.assertTrue(response.status_code == 400)
         self.assertTrue(msg == "'price1' is an invalid keyword argument for Product")
 
     def test_create_product_with_empty_not_nullable_condition_should_respond_with_400_and_informative_error_message(self):
         self.app = self.create_app().test_client()
-        response = self.app.post("/product", json={"name": "cheese", "unit": "each"})
+        response = self.app.post("/product/", json={"name": "cheese", "unit": "each"})
         msg = response.get_json().get("message")
         self.assertTrue(response.status_code == 400)
         self.assertTrue(msg == "Column 'price' cannot be null")
-
 
     def test_get_product_by_id_when_id_does_not_exists_should_respond_with_200_and_nice_error_message(self):
         self.app = self.create_app().test_client()
@@ -70,6 +69,21 @@ class TestProductCrud(FlaskSQLAlchemy):
         payload = response.get_json()
         self.assertTrue(response.status_code == 200)
         self.assertTrue(payload.get("message") == f"No {Product.__name__} was found")
+
+    def test_delete_product_by_id_should_return_200_response_when_successful(self):
+        populate_db()
+        self.app = self.create_app().test_client()
+        response = self.app.delete("/product/id=1")
+        msg = response.get_json().get("message")
+        self.assertTrue(response.status_code == 200)
+        self.assertTrue(msg == f"{Product.__name__.lower()} deleted ✅")
+
+    def test_delete_product_by_id_should_return_400_response_when_unsuccessful_when_product_does_not_exist(self):
+        self.app = self.create_app().test_client()
+        response = self.app.delete("/product/id=1")
+        msg = response.get_json().get("message")
+        self.assertTrue(response.status_code == 400)
+        self.assertTrue(msg == "No rows to delete")
 
 
 if __name__ == '__main__':

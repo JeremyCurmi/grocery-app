@@ -34,7 +34,7 @@ class TestUserCrud(FlaskSQLAlchemy):
 
     def test_create_user(self):
         self.app = self.create_app().test_client()
-        response = self.app.post("/user", json={"name":"name","email":"test@email.com","password":"password"})
+        response = self.app.post("/user/", json={"name":"name","email":"test@email.com","password":"password"})
         msg = response.get_json().get("message")
 
         self.assertTrue(response.status_code == 200)
@@ -44,15 +44,15 @@ class TestUserCrud(FlaskSQLAlchemy):
 
     def test_create_user_duplicated_row_should_respond_with_400_and_informative_error_message(self):
         self.app = self.create_app().test_client()
-        _ = self.app.post("/user", json={"name": "name", "email": "test@email.com", "password": "password"})
-        response = self.app.post("/user", json={"name": "name", "email": "test@email.com", "password": "password"})
+        _ = self.app.post("/user/", json={"name": "name", "email": "test@email.com", "password": "password"})
+        response = self.app.post("/user/", json={"name": "name", "email": "test@email.com", "password": "password"})
         msg = response.get_json().get("message")
         self.assertTrue(response.status_code == 400)
         self.assertTrue(msg == "Duplicate entry 'test@email.com' for key 'email'")
 
     def test_create_user_with_empty_not_nullable_condition_should_respond_with_400_and_informative_error_message(self):
         self.app = self.create_app().test_client()
-        response = self.app.post("/user", json={"name": "name", "email": "test@email.com"})
+        response = self.app.post("/user/", json={"name": "name", "email": "test@email.com"})
         msg = response.get_json().get("message")
         self.assertTrue(response.status_code == 400)
         self.assertTrue(msg == "Column 'password' cannot be null")

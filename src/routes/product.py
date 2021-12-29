@@ -1,24 +1,22 @@
 from flask import Blueprint, request
 from src.models import Product
-from sqlalchemy.exc import IntegrityError
-from . import return_200_response, handle_get_response, handle_get_multiple_values_response, return_400_response
-from src.services import (create_new,
-                        get_by_id,
+from . import handle_get_response, handle_get_multiple_values_response, handle_create_response, handle_delete_response
+from src.services import (get_by_id,
                         get_by_name,
                         get_all,
+delete_by_id,
                           )
-from src.utils import parse_sqlalchemy_integrity_error_message
 
 product = Blueprint("product", __name__, url_prefix="/product")
 
 
-@product.route("/id=<id>")
-def get_product_by_id(id: int):
-    product_ = get_by_id(Product, id)
+@product.route("/id=<int:id_>")
+def get_product_by_id(id_: int):
+    product_ = get_by_id(Product, id_)
     return handle_get_response(Product, product_)
 
 
-@product.route("/name=<name>")
+@product.route("/name=<string:name>")
 def get_product_by_name(name: str):
     products = get_by_name(Product, name)
     return handle_get_multiple_values_response(Product, products)
@@ -30,14 +28,12 @@ def get_all_products():
     return handle_get_multiple_values_response(Product, products)
 
 
-@product.route("", methods=['POST'])
+@product.route("/", methods=['POST'])
 def create_product():
-    user_data = request.get_json()
-    try:
-        result = create_new(Product, user_data)
-        return return_200_response(result)
-    except TypeError as err:
-        return return_400_response(str(err))
-    except IntegrityError as err:
-        msg = parse_sqlalchemy_integrity_error_message(err)
-        return return_400_response(msg)
+    product_data = request.get_json()
+    return handle_create_response(Product, product_data)
+
+
+@product.route("/id=<int:id_>", methods=["DELETE"])
+def delete_product(id_: int):
+    return handle_delete_response(Product, id_)
